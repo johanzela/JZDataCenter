@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Monitoreo y Control</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Animaciones de entrada */
+    .fade-in {
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="bg-blue-900 text-white font-sans">
+
+  <div class="container mx-auto p-8">
+    <!-- Título -->
+    <h1 class="text-5xl font-extrabold text-center mb-10 fade-in">Panel de Monitoreo y Control del Data Center IPA</h1>
+
+    <!-- Tarjetas del Dashboard -->
+    <div class="grid grid-cols-4 gap-6 mb-10 fade-in">
+      <!-- Tarjeta 1 -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Cámaras Activas</h2>
+        <p class="text-3xl font-extrabold text-blue-500">10</p>
+        <p class="text-sm text-gray-500">Interrupciones: 3</p>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Sistemas Biométricos</h2>
+        <p class="text-3xl font-extrabold text-green-500">100%</p>
+        <p class="text-sm text-gray-500">Tasa de Acceso</p>
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Detectores de Movimiento</h2>
+        <p class="text-3xl font-extrabold text-yellow-500">28</p>
+        <p class="text-sm text-gray-500">Eventos Detectados</p>
+      </div>
+
+      <!-- Tarjeta 4 -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Control de Alarma</h2>
+        <p class="text-3xl font-extrabold text-red-500">10 min</p>
+        <p class="text-sm text-gray-500">Promedio de Duración</p>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="flex justify-center mb-10 fade-in">
+      <a href="index.html" class="px-6 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-500 transition">Panel de Monitoreo</a>
+      <a href="seguridad.html" class="px-6 py-3 bg-green-600 text-white rounded-full font-bold shadow-lg hover:bg-green-500 transition ml-4">Panel de Seguridad</a>
+      <a href="indicadores.html" class="px-6 py-3 bg-purple-600 text-white rounded-full font-bold shadow-lg hover:bg-purple-500 transition ml-4">Indicadores de Red</a>
+      <a href="Utilizaciondered.html" class="px-6 py-3 bg-yellow-600 text-white rounded-full font-bold shadow-lg hover:bg-yellow-500 transition ml-4">Utilización de Equipos de Red</a>
+    </nav>
+
+    <!-- Imagen central -->
+    <div class="bg-blue-800 p-6 rounded-lg shadow-lg mb-10 flex justify-center fade-in">
+      <img src="pantalla.JPG" alt="Esquema del Data Center" class="rounded-lg shadow-md">
+    </div>
+
+    <!-- Panel de Componentes -->
+    <div class="grid grid-cols-4 gap-6 fade-in">
+      <!-- Cámaras -->
+      <div class="bg-gradient-to-tr from-blue-800 to-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-2">Cámaras</h2>
+        <p>Estado: <span class="text-green-400">Operativo</span></p>
+        <p>Interrupciones: <span class="text-red-400">3</span></p>
+        <div class="mt-4">
+          <p class="text-sm">Storage Usage:</p>
+          <div class="w-full bg-blue-700 rounded-full h-2">
+            <div class="bg-blue-400 h-2 rounded-full" style="width: 75%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sistemas Biométricos -->
+      <div class="bg-gradient-to-tr from-blue-800 to-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-2">Sistemas Biométricos</h2>
+        <p>Estado: <span class="text-green-400">Operativo</span></p>
+        <p>Fallos: <span class="text-red-400">5</span></p>
+        <div class="mt-4">
+          <p class="text-sm">Access Success Rate:</p>
+          <div class="w-full bg-blue-700 rounded-full h-2">
+            <div class="bg-green-400 h-2 rounded-full" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detector de Movimiento -->
+      <div class="bg-gradient-to-tr from-blue-800 to-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-2">Detector de Movimiento</h2>
+        <p>Estado: <span class="text-green-400">Activo</span></p>
+        <p>Falsas Alarmas: <span class="text-red-400">2</span></p>
+        <p class="text-sm mt-4">Event Count: <span class="text-blue-400 font-bold">28</span></p>
+      </div>
+
+      <!-- Sensor de Temperatura -->
+      <div class="bg-gradient-to-tr from-blue-800 to-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-2">Sensor de Temperatura</h2>
+        <p>Estado: <span class="text-green-400">Activo</span></p>
+        <p>Acciones: <span class="text-blue-400">5</span></p>
+        <div class="mt-4">
+          <p class="text-sm">Access Success Rate:</p>
+          <div class="w-full bg-blue-700 rounded-full h-2">
+            <div class="bg-green-400 h-2 rounded-full" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sensor de Humedad -->
+      <div class="bg-gradient-to-tr from-blue-800 to-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-lg font-bold mb-2">Sensor de Humedad</h2>
+        <p>Estado: <span class="text-green-400">Operativo</span></p>
+        <p>Alarmas: <span class="text-red-400">2</span></p>
+        <div class="mt-4">
+          <p class="text-sm">Battery Level:</p>
+          <div class="w-full bg-blue-700 rounded-full h-2">
+            <div class="bg-yellow-400 h-2 rounded-full" style="width: 85%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilización de Equipos de Red</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="container mx-auto p-8">
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Utilización de Equipos de Red</h1>
+
+    <!-- Recuadros de equipos con métricas dinámicas -->
+    <div class="grid grid-cols-3 gap-6">
+      <!-- Recuadro de Router -->
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-center mb-4">Router</h2>
+        <div>
+          <p class="font-semibold">GPU</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="router-gpu" class="bg-blue-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Memoria RAM</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="router-ram" class="bg-green-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Latencia</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="router-latency" class="bg-yellow-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Errores de Transmisión</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="router-errors" class="bg-red-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recuadro de Firewall -->
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-center mb-4">Firewall</h2>
+        <div>
+          <p class="font-semibold">GPU</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="firewall-gpu" class="bg-blue-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Memoria RAM</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="firewall-ram" class="bg-green-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Latencia</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="firewall-latency" class="bg-yellow-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Errores de Transmisión</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="firewall-errors" class="bg-red-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recuadro de Switch -->
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-center mb-4">Switch</h2>
+        <div>
+          <p class="font-semibold">GPU</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="switch-gpu" class="bg-blue-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Memoria RAM</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="switch-ram" class="bg-green-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Latencia</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="switch-latency" class="bg-yellow-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+          <p class="font-semibold">Errores de Transmisión</p>
+          <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+            <div id="switch-errors" class="bg-red-600 h-3 rounded-full text-center text-white"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script para actualizar dinámicamente las barras -->
+  <script>
+    // Función para generar un valor aleatorio entre 80 y 90
+    function getRandomValue() {
+      return Math.floor(Math.random() * (90 - 80 + 1)) + 80;
+    }
+
+    // Función para actualizar los porcentajes de cada recuadro cada segundo
+    setInterval(function() {
+      // Generamos valores aleatorios para las métricas (fluctuando entre 80% y 90%)
+      let routerGpu = getRandomValue();
+      let routerRam = getRandomValue();
+      let routerLatency = getRandomValue();
+      let routerErrors = getRandomValue();
+
+      let firewallGpu = getRandomValue();
+      let firewallRam = getRandomValue();
+      let firewallLatency = getRandomValue();
+      let firewallErrors = getRandomValue();
+
+      let switchGpu = getRandomValue();
+      let switchRam = getRandomValue();
+      let switchLatency = getRandomValue();
+      let switchErrors = getRandomValue();
+
+      // Actualizamos las barras de los equipos de red
+      document.getElementById('router-gpu').style.width = routerGpu + '%';
+      document.getElementById('router-ram').style.width = routerRam + '%';
+      document.getElementById('router-latency').style.width = routerLatency + '%';
+      document.getElementById('router-errors').style.width = routerErrors + '%';
+
+      document.getElementById('firewall-gpu').style.width = firewallGpu + '%';
+      document.getElementById('firewall-ram').style.width = firewallRam + '%';
+      document.getElementById('firewall-latency').style.width = firewallLatency + '%';
+      document.getElementById('firewall-errors').style.width = firewallErrors + '%';
+
+      document.getElementById('switch-gpu').style.width = switchGpu + '%';
+      document.getElementById('switch-ram').style.width = switchRam + '%';
+      document.getElementById('switch-latency').style.width = switchLatency + '%';
+      document.getElementById('switch-errors').style.width = switchErrors + '%';
+    }, 1000); // Actualiza cada segundo (1000ms)
+  </script>
+</body>
+</html>

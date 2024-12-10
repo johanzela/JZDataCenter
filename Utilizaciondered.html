@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilización de Equipos de Red</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="container mx-auto p-8">
+    <!-- Título -->
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Utilización de Equipos de Red</h1>
+
+    <!-- Barra de navegación -->
+    <nav class="flex justify-center mb-8">
+      <a href="index.html" class="px-6 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-500 transition">Panel de Monitoreo</a>
+      <a href="seguridad.html" class="px-6 py-3 bg-green-600 text-white rounded-full font-bold shadow-lg hover:bg-green-500 transition ml-4">Panel de Seguridad</a>
+      <a href="indicadores.html" class="px-6 py-3 bg-purple-600 text-white rounded-full font-bold shadow-lg hover:bg-purple-500 transition ml-4">Indicadores de Red</a>
+      <a href="Utilizaciondered.html" class="px-6 py-3 bg-yellow-600 text-white rounded-full font-bold shadow-lg hover:bg-yellow-500 transition ml-4">Utilización de Equipos de Red</a>
+    </nav>
+
+    <!-- Filtros -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <div class="grid grid-cols-4 gap-4">
+        <!-- Filtro: Estado del Equipo -->
+        <div>
+          <label for="estado-equipo" class="block text-gray-700 font-bold mb-2">Estado del Equipo</label>
+          <select id="estado-equipo" class="block w-full p-2 border border-gray-300 rounded-lg">
+            <option value="">Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Host -->
+        <div>
+          <label for="host" class="block text-gray-700 font-bold mb-2">Host</label>
+          <input id="host" type="text" placeholder="Buscar Host" class="block w-full p-2 border border-gray-300 rounded-lg">
+        </div>
+
+        <!-- Filtro: Grupo de Equipos -->
+        <div>
+          <label for="grupo-equipos" class="block text-gray-700 font-bold mb-2">Grupo de Equipos</label>
+          <select id="grupo-equipos" class="block w-full p-2 border border-gray-300 rounded-lg">
+            <option value="">Todos</option>
+            <option value="Grupo A">Grupo A</option>
+            <option value="Grupo B">Grupo B</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Botón de Filtrar -->
+      <div class="mt-4 text-center">
+        <button id="filterButton" class="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 transition">Filtrar</button>
+      </div>
+    </div>
+
+    <!-- Gráfico de Utilización de CPU -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <h2 class="text-2xl font-bold mb-4">Gráfico de Utilización de CPU</h2>
+      <canvas id="cpuUsageChart"></canvas>
+    </div>
+
+    <!-- Tabla -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <table id="equipmentTable" class="min-w-full">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">HOSTS</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">USO CPU (%) </th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">ESTADO</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">DURACIÓN</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">ÚLTIMA VERIFICACIÓN</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">INFORMACIÓN DE ESTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-status="Activo" data-group="Grupo A">
+            <td class="py-3 px-4 text-gray-800">Router</td>
+            <td class="py-3 px-4 text-gray-800">75%</td>
+            <td class="py-3 px-4 text-green-600 font-bold">Activo</td>
+            <td class="py-3 px-4 text-gray-800">1d 2h</td>
+            <td class="py-3 px-4 text-gray-800">11/02 12:00</td>
+            <td class="py-3 px-4 text-gray-800">Estado normal</td>
+          </tr>
+          <tr data-status="Activo" data-group="Grupo B">
+            <td class="py-3 px-4 text-gray-800"> Repetidor</td>
+            <td class="py-3 px-4 text-gray-800">50%</td>
+            <td class="py-3 px-4 text-green-600 font-bold">Activo</td>
+            <td class="py-3 px-4 text-gray-800">15d 5h</td>
+            <td class="py-3 px-4 text-gray-800">11/01 11:30</td>
+            <td class="py-3 px-4 text-gray-800">Estado normal</td>
+          </tr>
+          <tr data-status="Crítico" data-group="Grupo A">
+            <td class="py-3 px-4 text-gray-800"> Firewall</td>
+            <td class="py-3 px-4 text-gray-800">90%</td>
+            <td class="py-3 px-4 text-red-500 font-bold">Crítico</td>
+            <td class="py-3 px-4 text-gray-800">2h 15m</td>
+            <td class="py-3 px-4 text-gray-800">11/02 12:30</td>
+            <td class="py-3 px-4 text-gray-800">Alerta activada</td>
+          </tr>
+          <tr data-status="Activo" data-group="Grupo B">
+            <td class="py-3 px-4 text-gray-800"> Access Point</td>
+            <td class="py-3 px-4 text-gray-800">50%</td>
+            <td class="py-3 px-4 text-green-600 font-bold">Activo</td>
+            <td class="py-3 px-4 text-gray-800">15d 5h</td>
+            <td class="py-3 px-4 text-gray-800">11/01 11:30</td>
+            <td class="py-3 px-4 text-gray-800">Estado normal</td>
+          </tr>
+          <tr data-status="Crítico" data-group="Grupo A">
+            <td class="py-3 px-4 text-gray-800"> Switch</td>
+            <td class="py-3 px-4 text-gray-800">90%</td>
+            <td class="py-3 px-4 text-red-500 font-bold">Crítico</td>
+            <td class="py-3 px-4 text-gray-800">2h 15m</td>
+            <td class="py-3 px-4 text-gray-800">11/02 12:30</td>
+            <td class="py-3 px-4 text-gray-800">Alerta activada</td>
+          </tr>
+          <!-- Agrega más filas según sea necesario -->
+        </tbody>
+      </table>
+    </div>
+
+
+
+      <div class="container mx-auto p-8">
+        <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Utilización de Equipos de Red</h1>
+    
+        <!-- Recuadros de equipos con métricas dinámicas -->
+        <div class="grid grid-cols-3 gap-6">
+          <!-- Recuadro de Router -->
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-center mb-4">Router</h2>
+            <div>
+              <p class="font-semibold">GPU</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="router-gpu" class="bg-blue-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Memoria RAM</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="router-ram" class="bg-green-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Latencia</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="router-latency" class="bg-yellow-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Errores de Transmisión</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="router-errors" class="bg-red-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Recuadro de Firewall -->
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-center mb-4">Firewall</h2>
+            <div>
+              <p class="font-semibold">GPU</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="firewall-gpu" class="bg-blue-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Memoria RAM</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="firewall-ram" class="bg-green-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Latencia</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="firewall-latency" class="bg-yellow-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Errores de Transmisión</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="firewall-errors" class="bg-red-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+            </div>
+          </div>
+    
+          <!-- Recuadro de Switch -->
+          <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-center mb-4">Switch</h2>
+            <div>
+              <p class="font-semibold">GPU</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="switch-gpu" class="bg-blue-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Memoria RAM</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="switch-ram" class="bg-green-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Latencia</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="switch-latency" class="bg-yellow-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+              <p class="font-semibold">Errores de Transmisión</p>
+              <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+                <div id="switch-errors" class="bg-red-600 h-3 rounded-full text-center text-white"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Script para actualizar dinámicamente las barras -->
+      <script>
+        // Función para actualizar los porcentajes de cada recuadro cada segundo
+        setInterval(function() {
+          // Generamos valores aleatorios para simular los porcentajes (puedes reemplazar esto por tus datos reales)
+          let routerGpu = Math.floor(Math.random() * 100);
+          let routerRam = Math.floor(Math.random() * 100);
+          let routerLatency = Math.floor(Math.random() * 100);
+          let routerErrors = Math.floor(Math.random() * 100);
+    
+          let firewallGpu = Math.floor(Math.random() * 100);
+          let firewallRam = Math.floor(Math.random() * 100);
+          let firewallLatency = Math.floor(Math.random() * 100);
+          let firewallErrors = Math.floor(Math.random() * 100);
+    
+          let switchGpu = Math.floor(Math.random() * 100);
+          let switchRam = Math.floor(Math.random() * 100);
+          let switchLatency = Math.floor(Math.random() * 100);
+          let switchErrors = Math.floor(Math.random() * 100);
+    
+          // Actualizamos las barras de los equipos de red
+          document.getElementById('router-gpu').style.width = routerGpu + '%';
+          document.getElementById('router-ram').style.width = routerRam + '%';
+          document.getElementById('router-latency').style.width = routerLatency + '%';
+          document.getElementById('router-errors').style.width = routerErrors + '%';
+    
+          document.getElementById('firewall-gpu').style.width = firewallGpu + '%';
+          document.getElementById('firewall-ram').style.width = firewallRam + '%';
+          document.getElementById('firewall-latency').style.width = firewallLatency + '%';
+          document.getElementById('firewall-errors').style.width = firewallErrors + '%';
+    
+          document.getElementById('switch-gpu').style.width = switchGpu + '%';
+          document.getElementById('switch-ram').style.width = switchRam + '%';
+          document.getElementById('switch-latency').style.width = switchLatency + '%';
+          document.getElementById('switch-errors').style.width = switchErrors + '%';
+        }, 1000); // Actualiza cada segundo
+      </script>
+
+  </div>
+
+  <!-- Script para el gráfico de utilización de CPU -->
+  <script>
+    const ctx = document.getElementById('cpuUsageChart').getContext('2d');
+    const cpuUsageChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Equipo 1', 'Equipo 2', 'Equipo 3'],
+        datasets: [{
+          label: 'Uso de CPU (%)',
+          data: [75, 50, 90],
+          backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 99, 132, 0.2)'
+          ],
+          borderColor: [
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 99, 132, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Porcentaje de Uso'
+            }
+          }
+        }
+      }
+    });
+
+    // Funcionalidad del botón de filtrar
+    document.getElementById('filterButton').addEventListener('click', function() {
+      const estado = document.getElementById('estado-equipo').value;
+      const host = document.getElementById('host').value.toLowerCase();
+      const grupo = document.getElementById('grupo-equipos').value;
+
+      const rows = document.querySelectorAll('#equipmentTable tbody tr');
+      rows.forEach(row => {
+        const rowStatus = row.getAttribute('data -status').toLowerCase();
+        const rowGroup = row.getAttribute('data-group').toLowerCase();
+        const rowHost = row.cells[0].textContent.toLowerCase();
+
+        const statusMatch = estado ? rowStatus === estado.toLowerCase() : true;
+        const hostMatch = host ? rowHost.includes(host) : true;
+        const groupMatch = grupo ? rowGroup === grupo.toLowerCase() : true;
+
+        if (statusMatch && hostMatch && groupMatch) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

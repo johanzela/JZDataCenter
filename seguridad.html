@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Seguridad</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <div class="container mx-auto p-8">
+    <!-- Título -->
+    <h1 class="text-4xl font-bold text-center text-green-600 mb-10">Monitoreo - Detalles del Estado - Servicios</h1>
+
+    <!-- Barra de navegación -->
+    <nav class="flex justify-center mb-8">
+      <a href="index.html" class="px-6 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-500 transition">Panel de Monitoreo</a>
+      <a href="seguridad.html" class="px-6 py-3 bg-green-600 text-white rounded-full font-bold shadow-lg hover:bg-green-500 transition ml-4">Panel de Seguridad</a>
+      <a href="indicadores.html" class="px-6 py-3 bg-purple-600 text-white rounded-full font-bold shadow-lg hover:bg-purple-500 transition ml-4">Indicadores de Red</a>
+      <a href="Utilizaciondered.html" class="px-6 py-3 bg-yellow-600 text-white rounded-full font-bold shadow-lg hover:bg-yellow-500 transition ml-4">Utilización de Equipos de Red</a>
+    </nav>
+
+    <!-- Filtros -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+      <div class="grid grid-cols-4 gap-4">
+        <!-- Filtro: Estado del Servicio -->
+        <div>
+          <label for="estado-servicio" class="block text-gray-700 font-bold mb-2">Estado del Servicio</label>
+          <select id="estado-servicio" class="block w-full p-2 border border-gray-300 rounded-lg">
+            <option>Todos</option>
+            <option>OK</option>
+            <option>Crítico</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Estado -->
+        <div>
+          <label for="estado" class="block text-gray-700 font-bold mb-2">Estado</label>
+          <select id="estado" class="block w-full p-2 border border-gray-300 rounded-lg">
+            <option>Todos</option>
+            <option>Activo</option>
+            <option>Inactivo</option>
+          </select>
+        </div>
+
+        <!-- Filtro: Host -->
+        <div>
+          <label for="host" class="block text-gray-700 font-bold mb-2">Host</label>
+          <input id="host" type="text" placeholder="Buscar Host" class="block w-full p-2 border border-gray-300 rounded-lg">
+        </div>
+
+        <!-- Filtro: Grupo de Servicios -->
+        <div>
+          <label for="grupo-servicios" class="block text-gray-700 font-bold mb-2">Grupo de Servicios</label>
+          <select id="grupo-servicios" class="block w-full p-2 border border-gray-300 rounded-lg">
+            <option>Todos</option>
+            <option>Grupo A</option>
+            <option>Grupo B</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Botón de Filtrar -->
+      <div class="mt-4 text-center">
+        <button class="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg shadow-md hover:bg-blue-600 transition">Filtrar</button>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+      <table class="min-w-full">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">HOSTS</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">SERVICIOS</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">ESTADO</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">DURACIÓN</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">ÚLTIMA VERIFICACIÓN</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">TÍTULOS</th>
+            <th class="py-3 px-4 text-left text-sm font-bold text-gray-700">INFORMACIÓN DE ESTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="py-3 px-4 text-gray-800">A-01</td>
+            <td class="py-3 px-4 text-gray-800">Alarma_Humedad</td>
+            <td class="py-3 px-4 text-green-600 font-bold">OK</td>
+            <td class="py-3 px-4 text-gray-800">1d 4h</td>
+            <td class="py-3 px-4 text-gray-800">11/02 12:00</td>
+            <td class="py-3 px-4 text-gray-800">Estado normal</td>
+            <td class="py-3 px-4 text-gray-800">Sin incidentes</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4 text-gray-800">A-02</td>
+            <td class="py-3 px-4 text-gray-800">Alarma_Temperatura</td>
+            <td class="py-3 px-4 text-green-600 font-bold">OK</td>
+            <td class="py-3 px-4 text-gray-800">15d 5h</td>
+            <td class="py-3 px-4 text-gray-800">11/01 11:30</td>
+            <td class="py-3 px-4 text-gray-800">Estado normal</td>
+            <td class="py-3 px-4 text-gray-800">Sin incidentes</td>
+          </tr>
+          <tr>
+            <td class="py-3 px-4 text-gray-800">A-03</td>
+            <td class="py-3 px-4 text-gray-800">Alarma_Fuego</td>
+            <td class="py-3 px-4 text-red-500 font-bold">Crítico</td>
+            <td class="py-3 px-4 text-gray-800">2h 15m</td>
+            <td class="py-3 px-4 text-gray-800">11/02 12:30</td>
+            <td class="py-3 px-4 text-gray-800">Alerta activada</td>
+            <td class="py-3 px-4 text-gray-800">Alarma detectada</td>
+          </tr>
+          <!-- Agrega más filas según sea necesario -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+</html>

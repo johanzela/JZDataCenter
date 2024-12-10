@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indicadores de Gestión de Red</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0"></script>
+  <style>
+    /* Animaciones de entrada */
+    .fade-in {
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Estilo del modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+    .modal-content {
+      background-color: #f9f9f9;
+      margin: 10% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .modal-header {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: black; /* Cambiar el color del texto a negro */
+    }
+    .modal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .modal-table th, .modal-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      color: black; /* Cambiar el color del texto a negro */
+    }
+    .modal-table th {
+      background-color: #f2f2f2;
+    }
+    .usage-data {
+      color: black; /* Cambiar el color del texto a negro */
+      font-weight: bold; /* Hacer el texto más destacado */
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-blue-900 to-gray-900 text-white font-sans">
+
+  <div class="container mx-auto p-8">
+    <!-- Título -->
+    <h1 class="text-5xl font-extrabold text-center mb-10 text-blue-400 fade-in">Dashboard de Indicadores de Gestión de Red</h1>
+
+    <!-- Tarjetas del Dashboard -->
+    <div class="grid grid-cols-4 gap-6 mb-10 fade-in">
+      <!-- Capacidad de la Red -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Capacidad de la Red</h2>
+        <p class="text-3xl font-extrabold text-blue-500">150 Mbps</p>
+        <p class="text-sm text-gray-500">Ancho de Banda Total</p>
+      </div>
+
+      <!-- Latencia Promedio -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Latencia Promedio</h2>
+        <p class="text-3xl font-extrabold text-green-500">16.4 ms</p>
+        <p class="text-sm text-gray-500">Tiempo Promedio de Respuesta</p>
+      </div>
+
+      <!-- Pérdida de Paquetes -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Pérdida de Paquetes</h2>
+        <p class="text-3xl font-extrabold text-red-500">5%</p>
+        <p class="text-sm text-gray-500">Total de Paquetes Perdidos</p>
+      </div>
+
+      <!-- Calidad de Servicios -->
+      <div class="bg-white text-center p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-bold text-gray-700">Calidad de Servicios </h2>
+        <p class=" text-3xl font-extrabold text-cyan-500">10ms</p>
+        <p class="text-sm text-gray-500">Voz</p>
+        <p class="text-3xl font-extrabold text-cyan-500">20ms</p>
+        <p class="text-sm text-gray-500">Video</p>
+        <p class="text-3xl font-extrabold text-cyan-500">5ms</p>
+        <p class="text-sm text-gray-500">Datos</p>
+      </div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="flex justify-center mb-10 fade-in">
+      <a href="index.html" class="px-6 py-3 bg-blue-600 text-white rounded-full font-bold shadow-lg hover:bg-blue-500 transition">Panel de Monitoreo</a>
+      <a href="seguridad.html" class="px-6 py-3 bg-green-600 text-white rounded-full font-bold shadow-lg hover:bg-green-500 transition ml-4">Panel de Seguridad</a>
+      <a href="indicadores.html" class="px-6 py-3 bg-purple-600 text-white rounded-full font-bold shadow-lg hover:bg-purple-500 transition ml-4">Indicadores de Red</a>
+      <a href="Utilizaciondered.html" class="px-6 py-3 bg-yellow-600 text-white rounded-full font-bold shadow-lg hover:bg-yellow-500 transition ml-4">Utilización de Equipos de Red</a>
+    </nav>
+
+    <!-- Gráficos -->
+    <div class="grid grid-cols-3 gap-8 fade-in">
+      <!-- Capacidad de la Red -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartCapacity')">
+        <h2 class="text-lg font-bold mb-4 text-blue-300">Capacidad de la Red</h2>
+        <p class="text-xl font-extrabold text-blue-500">80% Usado</p>
+        <canvas id="chartCapacity"></canvas>
+        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400" onclick="alert('Reporte mensual de capacidad');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Latencia -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartLatency')">
+        <h2 class="text-lg font-bold mb-4 text-yellow-300">Latencia Promedio</h2>
+        <p class="text-xl font-extrabold text-yellow-500">15 ms</p>
+        <canvas id="chartLatency"></canvas>
+        <button class="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-400" onclick="alert('Reporte mensual de latencia');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Pérdida de Paquetes -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartPacketLoss')">
+        <h2 class="text-lg font-bold mb-4 text-red-300">Pérdida de Paquetes</h2>
+        <p class="text-xl font-extrabold text-red-500">5% Perdido</p>
+        <canvas id="chartPacketLoss"></canvas>
+        <button class="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400" onclick="alert('Reporte mensual de pérdida de paquetes');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Disponibilidad -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartAvailability')">
+        <h2 class="text-lg font-bold mb-4 text-blue-300">Disponibilidad</h2>
+        <p class="text-xl font-extrabold text-blue-500">99.99%</p>
+        <canvas id="chartAvailability"></canvas>
+        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400" onclick="alert('Reporte mensual de disponibilidad');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Utilización de Equipos -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick=" openModal('chartEquipment')">
+        <h2 class="text-lg font-bold mb-4 text-green-300">Utilización de Equipos</h2>
+        <p class="text-xl font-extrabold text-green-500">85% Usado</p>
+        <canvas id="chartEquipment"></canvas>
+        <button class="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-400" onclick="alert('Reporte mensual de utilización de equipos');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Seguridad de la Red -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartSecurity')">
+        <h2 class="text-lg font-bold mb-4 text-red-300">Seguridad de la Red</h2>
+        <p class="text-xl font-extrabold text-red-500">1 Ataque/Mes</p>
+        <canvas id="chartSecurity"></canvas>
+        <button class="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-400" onclick="alert('Reporte mensual de seguridad');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Redundancia -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartRedundancy')">
+        <h2 class="text-lg font-bold mb-4 text-cyan-300">Redundancia y Resiliencia</h2>
+        <p class="text-xl font-extrabold text-cyan-500">12 Segundos</p>
+        <canvas id="chartRedundancy"></canvas>
+        <button class="mt-4 px-4 py-2 bg-cyan-500 text-white rounded hover:bg-cyan-400" onclick="alert('Reporte mensual de redundancia');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Escalabilidad -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartScalability')">
+        <h2 class="text-lg font-bold mb-4 text-yellow-300">Escalabilidad</h2>
+        <p class="text-xl font-extrabold text-yellow-500">20% Usado</p>
+        <canvas id="chartScalability"></canvas>
+        <button class="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-400" onclick="alert('Reporte mensual de escalabilidad');">Ver Reporte Mensual</button>
+      </div>
+
+      <!-- Tráfico y Flujo de Datos -->
+      <div class="bg-gradient-to-tr from-gray-200 to-gray-300 p-6 rounded-lg shadow-lg cursor-pointer" onclick="openModal('chartTraffic')">
+        <h2 class="text-lg font-bold mb-4 text-blue-300">Tráfico y Flujo de Datos</h2>
+        <p class="text-xl font-extrabold text-blue-500">0.5 Gbps</p>
+        <canvas id="chartTraffic"></canvas>
+        <button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400" onclick="alert('Reporte mensual de tráfico');">Ver Reporte Mensual</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 class="modal-header">Datos del Gráfico</h2>
+      <div id="cpuUsage" class="mb-4 usage-data"></div>
+      <canvas id="chartUsage" class="mb-4"></canvas>
+      <table class="modal-table">
+        <thead>
+          <tr>
+            <th>Equipo</th>
+            <th>Porcentaje de Uso</th>
+            <th>Fecha de Uso</th>
+          </tr>
+        </thead>
+        <tbody id="usageTable">
+          <tr><td>Equipo 1</td><td>80%</td><td>2024-01-01</td></tr>
+          <tr><td>Equipo 2</td><td>70%</td><td>2024-01-02</td></tr>
+          <tr><td>Equipo 3</td><td>60%</td><td>2024-01-03</td></tr>
+          < tr><td>Equipo 4</td><td>90%</td><td>2024-01-04</td></tr>
+          <tr><td>Equipo 5</td><td>75%</td><td>2024-01-05</td></tr>
+          <tr><td>Equipo 6</td><td>85%</td><td>2024-01-06</td></tr>
+          <tr><td>Equipo 7</td><td>65%</td><td>2024-01-07</td></tr>
+          <tr><td>Equipo 8</td><td>95%</td><td>2024-01-08</td></tr>
+          <tr><td>Equipo 9</td><td>55%</td><td>2024-01-09</td></tr>
+          <tr><td>Equipo 10</td><td>100%</td><td>2024-01-10</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Script para los gráficos -->
+  <script>
+    // Configuración de datos para gráficos
+    const dataCapacity = {
+      labels: ['Usado', 'Libre'],
+      datasets: [{
+        data: [80, 20],
+        backgroundColor: ['#4ade80', '#6366f1'],
+      }]
+    };
+
+    const dataLatency = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Latencia (ms)',
+        data: [15, 14, 16, 13, 15, 17, 12, 14, 15, 16],
+        borderColor: '#fbbf24',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataPacketLoss = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Pérdida de Paquetes (%)',
+        data: [5, 4, 6, 3, 5, 7, 2, 4, 5, 6],
+        backgroundColor: '#ef4444',
+        borderColor: '#ef4444',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataAvailability = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Disponibilidad (%)',
+        data: [99.99, 99.95, 99.97, 99.98, 99.96, 99.99, 99.94, 99.95, 99.98, 99.97],
+        backgroundColor: '#6366f1',
+        borderColor: '#6366f1',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataEquipment = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Uso de Equipos (%)',
+        data: [85, 80, 75, 90, 85, 70, 95, 80, 75, 100],
+        backgroundColor: '#4ade80',
+        borderColor: '#4ade80',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataSecurity = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Ataques/Mes',
+        data: [1, 2, 0, 1, 3, 1, 0, 2, 1, 0],
+        backgroundColor: '#f87171',
+        borderColor: '#f87171',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataRedundancy = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 
+      'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Redundancia (Segundos)',
+        data: [12, 10, 15, 11, 12, 9, 14, 10, 13, 12],
+        backgroundColor: '#22d3ee',
+        borderColor: '#22d3ee',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataScalability = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Escalabilidad (%)',
+        data: [20, 25, 30, 15, 20, 35, 40, 30, 25, 20],
+        backgroundColor: '#facc15',
+        borderColor: '#facc15',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    const dataTraffic = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre'],
+      datasets: [{
+        label: 'Tráfico (Gbps)',
+        data: [0.5, 0.6, 0.4, 0.7, 0.5, 0.8, 0.6, 0.5, 0.7, 0.9],
+        backgroundColor: '#6366f1',
+        borderColor: '#6366f1',
+        fill: false,
+        tension: 0.1
+      }]
+    };
+
+    // Renderización de los gráficos
+    new Chart(document.getElementById('chartCapacity'), { type: 'doughnut', data: dataCapacity });
+    new Chart(document.getElementById('chartLatency'), { type: 'line', data: dataLatency });
+    new Chart(document.getElementById('chartPacketLoss'), { type: 'line', data: dataPacketLoss });
+    new Chart(document.getElementById('chartAvailability'), { type: 'line', data: dataAvailability });
+    new Chart(document.getElementById('chartEquipment'), { type: 'line', data: dataEquipment });
+    new Chart(document.getElementById('chartSecurity'), { type: 'line', data: dataSecurity });
+    new Chart(document.getElementById('chartRedundancy'), { type: 'line', data: dataRedundancy });
+    new Chart(document.getElementById('chartScalability'), { type: 'line', data: dataScalability });
+    new Chart(document.getElementById('chartTraffic'), { type: 'line', data: dataTraffic });
+    
+    // Renderizar el gráfico de uso en el modal
+    function renderUsageChart() {
+      new Chart(document.getElementById('chartUsage'), {
+        type: 'line',
+        data: dataUsage,
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Funciones para abrir y cerrar el modal
+    function openModal(chartId) {
+      document.getElementById('myModal').style.display = 'block';
+      let usageData = '';
+      let usageTable = document.getElementById('usageTable');
+      usageTable.innerHTML = ''; // Limpiar la tabla antes de llenarla
+
+      switch (chartId) {
+        case 'chartCapacity':
+          usageData = 'Datos de Capacidad: 80% Usado, 20% Libre';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>80%</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>20%</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>60%</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>90%</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>75%</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>85%</td><td>2024-01-06</td></tr>
+            <tr><td> Equipo 7</td><td>65%</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>95%</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>55%</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>100%</td><td>2024-01-10</td></tr>
+           `;
+          break;
+        case 'chartLatency':
+          usageData = 'Datos de Latencia: 15 ms Promedio';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>15 ms</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>16 ms</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>14 ms</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>17 ms</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>13 ms</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>18 ms</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>12 ms</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>19 ms</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>11 ms</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>20 ms</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartPacketLoss':
+          usageData = 'Datos de Pérdida de Paquetes: 5% Perdido';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>5%</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>0%</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>10%</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>15%</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>5%</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>20%</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>0%</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>25%</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>5%</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>30%</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartAvailability':
+          usageData = 'Datos de Disponibilidad: 99.99%';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>99.99%</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>99.95%</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>99.97%</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>99.98%</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td>< td>99.96%</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>99.99%</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>99.94%</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>99.95%</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>99.98%</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>99.97%</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartEquipment':
+          usageData = 'Datos de Utilización de Equipos: 85% Usado';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>85%</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>15%</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>75%</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>90%</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>85%</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>70%</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>95%</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>80%</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>75%</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>100%</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartSecurity':
+          usageData = 'Datos de Seguridad: 1 Ataque/Mes';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>1 Ataque</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>0 Ataques</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>2 Ataques</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>1 Ataque</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>3 Ataques</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>1 Ataque</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>0 Ataques</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>2 Ataques</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>1 Ataque</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>0 Ataques</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartRedundancy':
+          usageData = 'Datos de Redundancia: 12 Segundos';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>12 Segundos</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>10 Segundos</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>15 Segundos</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>11 Segundos</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>12 Segundos</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>9 Segundos</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>14 Segundos</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>10 Segundos</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>13 Segundos</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>12 Segundos</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartScalability':
+          usageData = 'Datos de Escalabilidad: 20% Usado';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>20%</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>25%</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>30%</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>15%</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>20%</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>35%</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>40%</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>30%</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>25%</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>20%</td><td>2024-01-10</td></tr>
+          `;
+          break;
+        case 'chartTraffic':
+          usageData = 'Datos de Tráfico: 0.5 Gbps';
+          usageTable.innerHTML = `
+            <tr><td>Equipo 1</td><td>0.5 Gbps</td><td>2024-01-01</td></tr>
+            <tr><td>Equipo 2</td><td>0.6 Gbps</td><td>2024-01-02</td></tr>
+            <tr><td>Equipo 3</td><td>0.4 Gbps</td><td>2024-01-03</td></tr>
+            <tr><td>Equipo 4</td><td>0.7 Gbps</td><td>2024-01-04</td></tr>
+            <tr><td>Equipo 5</td><td>0.5 Gbps</td><td>2024-01-05</td></tr>
+            <tr><td>Equipo 6</td><td>0.8 Gbps</td><td>2024-01-06</td></tr>
+            <tr><td>Equipo 7</td><td>0.6 Gbps</td><td>2024-01-07</td></tr>
+            <tr><td>Equipo 8</td><td>0.5 Gbps</td><td>2024-01-08</td></tr>
+            <tr><td>Equipo 9</td><td>0.7 Gbps</td><td>2024-01-09</td></tr>
+            <tr><td>Equipo 10</td><td>0.9 Gbps</td><td>2024-01-10</td></tr>
+          `;
+          break;
+      }
+      document.getElementById('cpuUsage').innerText = usageData;
+      renderUsageChart(); // Llamar a la función para renderizar el gráfico de uso
+    }
+
+    function closeModal() {
+      document.getElementById('myModal').style.display = 'none';
+    }
+
+    // Cerrar el modal al hacer clic fuera de él
+    window.onclick = function(event) {
+      if (event.target == document.getElementById('myModal')) {
+        closeModal();
+      }
+    }
+  </script>
+</body>
+</html>
